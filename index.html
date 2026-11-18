@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Reestruturação Flores da Saudade</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style><style>
+/* Layout: documento de apresentação — diagnóstico, três direções comparáveis lado a lado, e o que muda por baixo. */
+:root{
+  --papel:#FBF9F5; --cartao:#FFFFFF; --borda:#E4DED2; --tinta:#272522; --tinta-2:#60594E;
+  --verde:#2E3B33; --dourado:#8A6A35; --alerta:#9A3B22;
+  --display:'Cormorant Garamond',Georgia,serif;
+  --corpo:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--corpo);font-size:16px;line-height:1.6}
+.w{max-width:1060px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+section{padding-block:clamp(38px,5.5vw,62px)}
+h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,5.6vw,56px)}
+h2{font-size:clamp(25px,3.4vw,36px)}
+h3{font-size:22px}
+p{margin:0}
+em{color:var(--dourado);font-style:italic}
+.lead{color:var(--tinta-2);max-width:66ch}
+.olho{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dourado);font-weight:600;margin:0 0 14px}
+a{color:var(--tinta)}
+:focus-visible{outline:2.5px solid var(--dourado);outline-offset:3px;border-radius:5px}
+hr{border:0;border-top:1px solid var(--borda);margin:0}
+
+.capa{border-bottom:1px solid var(--borda)}
+.capa .w{padding-block:clamp(40px,6vw,76px)}
+.meta{display:flex;gap:10px 22px;flex-wrap:wrap;font-size:12.5px;color:var(--tinta-2);margin-top:26px;padding-top:18px;border-top:1px solid var(--borda)}
+
+.diag{display:grid;gap:14px}
+@media(min-width:760px){.diag{grid-template-columns:repeat(2,1fr);gap:16px}}
+.item{background:var(--cartao);border:1px solid var(--borda);border-left:3px solid var(--alerta);border-radius:8px;padding:16px 18px;min-width:0}
+.item b{display:block;font-size:15px;margin-bottom:4px}
+.item p{font-size:14px;color:var(--tinta-2)}
+.item.ok{border-left-color:var(--dourado)}
+
+.cards{display:grid;gap:20px;margin-top:34px}
+@media(min-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}}
+.prop{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.amostra{height:132px;display:grid;place-items:center;font-family:var(--display);font-size:27px;position:relative}
+.amostra span{position:absolute;top:10px;left:12px;font:700 10px/1 var(--corpo);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.a-a{background:#F6F1E9;color:#2E3B33}
+.a-b{background:#0F3D2E;color:#CBE8D7;font-family:var(--corpo);font-weight:700;letter-spacing:-.02em}
+.a-c{background:#121719;color:#C9A86A}
+.a-d{background:linear-gradient(90deg,rgba(31,71,51,.92),rgba(31,71,51,.25)),linear-gradient(#EFE7D8,#D8CBB4);color:#fff}
+.a-e{background:#FBF8F2;color:#8A6A35;border-bottom:1px solid var(--borda)}
+.prop .corpo{padding:18px;display:flex;flex-direction:column;gap:11px;flex:1}
+.prop h3{font-size:24px}
+.prop .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dourado);font-weight:600}
+.prop p{font-size:14.5px;color:var(--tinta-2)}
+.prop ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:13.5px}
+.prop li::before{content:"—";color:var(--dourado);margin-right:8px}
+.escolha{background:var(--papel);border:1px solid var(--borda);border-radius:7px;padding:11px 13px;font-size:13px;color:var(--tinta-2)}
+.escolha b{color:var(--tinta);display:block;font-size:12px;margin-bottom:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:14px 20px;font:600 14.5px/1 var(--corpo);cursor:pointer;text-decoration:none;min-height:50px;background:var(--verde);color:var(--papel);margin-top:auto}
+
+
+.tab{overflow-x:auto;margin-top:26px;border:1px solid var(--borda);border-radius:10px;background:var(--cartao)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:13px 15px;border-bottom:1px solid var(--borda);vertical-align:top}
+th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dourado);font-weight:600;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+
+.fundo{background:var(--cartao);border-block:1px solid var(--borda)}
+.grid2{display:grid;gap:22px;margin-top:30px}
+@media(min-width:820px){.grid2{grid-template-columns:repeat(2,1fr);gap:26px}}
+.bloco{border:1px solid var(--borda);border-radius:10px;padding:20px;background:var(--papel);min-width:0}
+.bloco h3{font-size:20px;margin-bottom:9px}
+.bloco p{font-size:14.5px;color:var(--tinta-2)}
+.bloco code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;background:var(--cartao);border:1px solid var(--borda);border-radius:4px;padding:1px 5px}
+
+.passos{display:grid;gap:0;margin-top:26px;counter-reset:p}
+.p{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--borda)}
+.p:last-child{border-bottom:0}
+.p .n{width:27px;height:27px;border-radius:50%;background:var(--verde);color:var(--papel);display:grid;place-items:center;font:700 12px/1 var(--corpo);flex:none}
+
+.p b{display:block;font-size:15.5px;margin-bottom:3px}
+.p p{font-size:14px;color:var(--tinta-2)}
+.p small{display:inline-block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dourado);font-weight:600;margin-top:6px}
+
+.pergunta{background:var(--cartao);border:1px solid var(--borda);border-radius:10px;padding:20px;margin-top:26px}
+.pergunta ol{margin:12px 0 0;padding-left:20px;display:grid;gap:9px;font-size:14.5px;color:var(--tinta-2)}
+.pergunta li strong{color:var(--tinta)}
+
+footer{padding-block:34px 44px;border-top:1px solid var(--borda);font-size:13px;color:var(--tinta-2)}
+</style>
+</head>
+<body>
+<header class="capa"><div class="w">
+  <p class="olho">Proposta de reestruturação</p>
+  <h1>Flores da Saudade — <em>três caminhos</em> para o novo site.</h1>
+  <p class="lead" style="margin-top:20px;font-size:17px">Mesma base: catálogo dinâmico, pedido pelo WhatsApp sem vai-e-vem e site que o cliente consegue atualizar sozinho. O que muda entre as três é o tom e a forma de conduzir quem chega.</p>
+  <div class="meta"><span>floresdasaudade.com.br</span><span>WordPress + Elementor Pro + ACF</span><span>21 coroas em 3 linhas</span><span>Novembro de 2026</span></div>
+</div></header>
+
+<main>
+<section class="w">
+  <p class="olho">Ponto de partida</p>
+  <h2>O que o site atual já faz bem — e o que trava a venda</h2>
+  <p class="lead" style="margin-top:14px">Levantamento feito direto na página publicada. Os itens com marca dourada são acertos a preservar.</p>
+  <div class="diag" style="margin-top:28px">
+    <div class="item ok"><b>A oferta já é clara</b><p>Preço visível em todos os modelos, frete grátis e entrega no mesmo dia aparecem logo no topo. Muita floricultura esconde preço; aqui não.</p></div>
+    <div class="item ok"><b>O caminho do WhatsApp já existe</b><p>Cada coroa tem botão próprio. A intenção está certa — o problema é como a mensagem é montada.</p></div>
+    <div class="item"><b>A mensagem chega suja</b><p>O link cola a URL do arquivo de imagem dentro do texto. O vendedor recebe um bloco com <code>-removebg-preview.png</code> e precisa decifrar qual coroa é.</p></div>
+    <div class="item"><b>Tudo é editado à mão</b><p>Preço, nome e foto estão escritos dentro do layout. Trocar um valor significa abrir o Elementor e mexer em cada bloco.</p></div>
+    <div class="item"><b>Erros que a edição manual causou</b><p>A coroa 004 ficou sem link de compra. A 008 aponta para a foto da 003. A linha Premium está fora de ordem de preço.</p></div>
+    <div class="item"><b>Nomes que não vendem</b><p>“NOVIDADES – FLORES 01” para uma peça de R$ 900. O nome não ajuda o cliente a escolher nem a lembrar depois.</p></div>
+    <div class="item"><b>Links mortos e marca inconsistente</b><p>Menu do rodapé, FAQ e Suporte apontam para “#”. O nome aparece como “Flores da Saudade” e “Flores da Saudades”. Copyright em 2023.</p></div>
+    <div class="item"><b>Sem página por produto</b><p>Nada para indexar no Google, nada para compartilhar, nada para o WhatsApp transformar em card com foto.</p></div>
+  </div>
+</section>
+
+<hr>
+
+<section class="w">
+  <p class="olho">As três direções</p>
+  <h2>Mesma estrutura, cinco temperamentos</h2>
+  <p class="lead" style="margin-top:14px">Cada protótipo abaixo é navegável no celular e no computador. O botão de compra abre uma demonstração do que o vendedor recebe no WhatsApp. Todos são claros; o C é a única versão em fundo escuro.</p>
+  <div class="cards">
+    <article class="prop">
+      <div class="amostra a-a"><span>Layout A</span>Sereno</div>
+      <div class="corpo">
+        <p class="tag">Clássico editorial · claro</p>
+        <h3>Sereno</h3>
+        <p>Floricultura tradicional com cara de ateliê: muito respiro, tipografia serifada, marfim e verde profundo. Catálogo em abas por linha de preço e uma seção de frases para a faixa.</p>
+        <ul><li>Reduz a ansiedade de quem compra no luto</li><li>Abas evitam rolar 21 produtos seguidos</li><li>Reforça os 40 anos de marca</li></ul>
+        <div class="escolha"><b>Escolha este se…</b>o cliente quer transmitir tradição e atender famílias que decidem com calma.</div>
+        <a class="btn" href="a-sereno.html">Abrir protótipo A</a>
+      </div>
+    </article>
+    <article class="prop">
+      <div class="amostra a-b"><span>Layout B</span>Pedido Rápido</div>
+      <div class="corpo">
+        <p class="tag">Direto · focado em conversão</p>
+        <h3>Pedido Rápido</h3>
+        <p>Para quem chega do Google com pressa. O hero traz um formulário que monta o pedido inteiro, e o catálogo filtra por faixa de preço.</p>
+        <ul><li>Acaba com o vai-e-vem no WhatsApp</li><li>O formulário também alimenta o CRM</li><li>Cidades no texto ajudam no SEO local</li></ul>
+        <div class="escolha"><b>Escolha este se…</b>o tráfego vem de anúncios e busca, e o cliente quer medir cada conversão.</div>
+        <a class="btn" href="b-pedido-rapido.html">Abrir protótipo B</a>
+      </div>
+    </article>
+    <article class="prop">
+      <div class="amostra a-c"><span>Layout C</span>Homenagem</div>
+      <div class="corpo">
+        <p class="tag">Contemporâneo · escuro · premium</p>
+        <h3>Homenagem</h3>
+        <p>Fundo escuro, luz dourada sobre as flores. Começa pela pergunta “para quem é esta homenagem?” e dá vitrine própria à linha Premium.</p>
+        <ul><li>O fundo escuro faz as flores saltarem</li><li>A escolha guiada reduz a indecisão</li><li>Valoriza o ticket mais alto</li></ul>
+        <div class="escolha"><b>Escolha este se…</b>o objetivo é subir o ticket médio — e houver fotos profissionais em fundo escuro.</div>
+        <a class="btn" href="c-homenagem.html">Abrir protótipo C</a>
+      </div>
+    </article>
+    <article class="prop">
+      <div class="amostra a-d"><span>Layout D</span>Memória</div>
+      <div class="corpo">
+        <p class="tag">Claro · hero em imagem de fundo</p>
+        <h3>Memória</h3>
+        <p>Abre com uma fotografia das coroas ocupando a largura inteira, com véu verde do lado do texto. O catálogo vem logo abaixo, em trilhos por linha, com selos de “mais vendida” e “custo-benefício”.</p>
+        <ul><li>A foto vende antes de qualquer texto</li><li>Trilhos mostram as 3 linhas sem rolagem longa</li><li>Formato mais próximo do concorrente de referência</li></ul>
+        <div class="escolha"><b>Escolha este se…</b>houver boas fotos do ambiente e o cliente quiser presença visual forte na primeira tela.</div>
+        <a class="btn" href="d-memoria.html">Abrir protótipo D</a>
+      </div>
+    </article>
+    <article class="prop">
+      <div class="amostra a-e"><span>Layout E</span>Homenagem Clara</div>
+      <div class="corpo">
+        <p class="tag">Claro · guiado pela relação</p>
+        <h3>Homenagem Clara</h3>
+        <p>A mesma estrutura do layout C — “para quem é a homenagem?”, três linhas como portas de entrada —, mas em creme e dourado. A vitrine Premium se inverte em verde escuro e vira o único bloco de contraste da página.</p>
+        <ul><li>A escolha guiada sem exigir fotos em fundo escuro</li><li>Um único bloco escuro destaca o ticket alto</li><li>Mais claro e legível ao sol, no celular</li></ul>
+        <div class="escolha"><b>Escolha este se…</b>gostou da condução do layout C, mas quer um site claro.</div>
+        <a class="btn" href="e-homenagem-clara.html">Abrir protótipo E</a>
+      </div>
+    </article>
+  </div>
+  <div class="tab">
+    <table style="min-width:780px">
+      <caption class="sr" style="position:absolute;left:-9999px">Comparação entre as três direções</caption>
+      <thead><tr><th>Critério</th><th>A · Sereno</th><th>B · Pedido Rápido</th><th>C · Homenagem</th><th>D · Memória</th><th>E · Homenagem Clara</th></tr></thead>
+      <tbody>
+        <tr><td>Tom</td><td>Claro, serifado</td><td>Claro, utilitário</td><td>Escuro, premium</td><td>Claro, fotográfico</td><td>Claro, premium</td></tr>
+        <tr><td>Primeira tela</td><td>Texto + coroa em arco</td><td>Formulário de pedido</td><td>Coroa iluminada</td><td>Foto de largura total</td><td>Coroa + halo dourado</td></tr>
+        <tr><td>Catálogo</td><td>Abas por linha</td><td>Filtro por preço</td><td>Portas + vitrine</td><td>Trilhos por linha</td><td>Portas + vitrine</td></tr>
+        <tr><td>Melhor para</td><td>Busca e indicação</td><td>Google Ads e urgência</td><td>Ticket alto</td><td>Impacto visual</td><td>Ticket alto, site claro</td></tr>
+        <tr><td>Exige fotos novas</td><td>Desejável</td><td>Desejável</td><td>Sim — fundo escuro</td><td>Sim — ambiente</td><td>Desejável</td></tr>
+        <tr><td>Esforço</td><td>Médio</td><td>Médio-alto</td><td>Médio</td><td>Médio</td><td>Médio</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="fundo"><div class="w">
+  <p class="olho">Por baixo das três</p>
+  <h2>O que muda na engenharia do site</h2>
+  <p class="lead" style="margin-top:14px">Independente do layout escolhido, a base é a mesma. É ela que resolve os erros de catálogo e devolve o controle ao cliente.</p>
+  <div class="grid2">
+    <div class="bloco">
+      <h3>Catálogo que se atualiza sozinho</h3>
+      <p>Cada coroa vira um registro com foto, preço, linha e código, cadastrado em um formulário simples no painel. O layout lê esses registros. Cadastrar uma coroa nova passa a ser preencher cinco campos — nunca mais duplicar blocos no Elementor.</p>
+    </div>
+    <div class="bloco">
+      <h3>Pedido que chega pronto no WhatsApp</h3>
+      <p>Cada coroa ganha endereço próprio, como <code>/coroas/imperial/</code>. O botão envia esse link, e o WhatsApp monta sozinho o card com foto, nome e preço. Acabam a URL de imagem colada no texto e o “qual coroa era mesmo?”.</p>
+    </div>
+    <div class="bloco">
+      <h3>Saber o que vende</h3>
+      <p>Cada botão é identificado por posição e por coroa. No relatório, o cliente vê qual seção gera mais conversa e qual modelo puxa a venda — e pode importar isso como conversão nos anúncios.</p>
+    </div>
+    <div class="bloco">
+      <h3>Rápido no 4G e acessível</h3>
+      <p>Fotos em formato leve e tamanho único, no máximo duas famílias de fonte, estrutura de página legível por leitor de tela. Acessibilidade em site de empresa é exigência da LBI, regulamentada pela norma ABNT NBR 17225.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="w">
+  <p class="olho">Antes de publicar</p>
+  <h2>Correções e dados a confirmar</h2>
+  <div class="passos">
+    <div class="p"><div class="n">1</div><div><b>Corrigir o que está quebrado hoje</b><p>Link de compra da coroa 004, foto trocada da 008, links “#” no rodapé, FAQ e Suporte, grafia “Flores da Saudades”, copyright 2023, ordem de preço da linha Premium.</p><small>Vale fazer mesmo antes do redesenho</small></div></div>
+    <div class="p"><div class="n">2</div><div><b>Fotografar as coroas em padrão único</b><p>Mesmo fundo, mesma distância, mesma luz. É o que faz o catálogo parecer profissional — e o que o layout C exige para funcionar.</p><small>Maior ganho visual por menor custo</small></div></div>
+    <div class="p"><div class="n">3</div><div><b>Nomear as coroas</b><p>Substituir “NOVIDADES – FLORES 01” por nomes que o cliente consiga lembrar e repetir no WhatsApp. Os protótipos já trazem uma sugestão de nomenclatura.</p><small>Sugestão aberta a revisão</small></div></div>
+    <div class="p"><div class="n">4</div><div><b>Confirmar as informações comerciais</b><p>Formas de pagamento e parcelamento, se a faixa com frase está inclusa, horário-limite para entrega no mesmo dia, cidades e cemitérios atendidos, e-mail, CNPJ e avaliações reais do Google.</p><small>Os textos do protótipo partem destes pontos</small></div></div>
+  </div>
+  <div class="pergunta">
+    <h3>O que precisamos decidir com você</h3>
+    <ol>
+      <li><strong>Qual direção seguir</strong> — A, B, C, D, E, ou uma combinação (por exemplo, o hero do D com o catálogo em abas do A).</li>
+      <li><strong>Se haverá sessão de fotos.</strong> A resposta muda o que é possível no layout.</li>
+      <li><strong>Horário-limite de entrega no mesmo dia.</strong> É a informação que mais aparece nas dúvidas e hoje não está no site.</li>
+      <li><strong>Avaliações reais do Google</strong> para substituir os textos de exemplo na seção de depoimentos.</li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer><div class="w">
+  <p>Protótipos navegáveis, feitos para avaliação. Textos, nomes de coroa e depoimentos são propostas — não há compromisso comercial nas páginas. As coroas aparecem como ilustração até a sessão de fotos.</p>
+</div></footer>
+</body>
+</html>

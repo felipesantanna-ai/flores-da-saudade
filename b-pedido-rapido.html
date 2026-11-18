@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Pedido Rápido</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style><style>
+/* Layout: hero com formulário de pedido em 3 etapas, catálogo filtrável por preço, blocos utilitários de confiança. */
+:root{
+  --fundo:#FFFFFF; --menta:#EEF5F0; --borda:#D9E5DD; --verde:#0F3D2E; --zap:#1DAA61;
+  --ambar:#F2B544; --tinta:#0F1A16; --tinta-2:#55635C;
+  --display:'Archivo',system-ui,'Segoe UI',sans-serif;
+  --corpo:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--tinta);font-family:var(--corpo);font-size:16px;line-height:1.55}
+.w{max-width:1140px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+section{padding-block:clamp(40px,6vw,72px)}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6vw,62px)}
+h2{font-size:clamp(26px,3.6vw,40px)}
+h3{font-size:18px;letter-spacing:-.01em}
+p{margin:0}
+.lead{color:var(--tinta-2);max-width:60ch}
+.olho{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-2);font-weight:600;margin:0 0 10px}
+a{color:inherit}
+:focus-visible{outline:2.5px solid var(--zap);outline-offset:3px;border-radius:6px}
+
+.vivo{background:var(--verde);color:var(--menta);font-size:13px;padding-block:8px}
+.vivo .w{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.pulso{width:8px;height:8px;border-radius:50%;background:var(--zap);display:inline-block;margin-right:7px}
+@media (prefers-reduced-motion:no-preference){.pulso{animation:p 2s infinite}@keyframes p{50%{opacity:.35}}}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--fundo);border-bottom:1px solid var(--borda);z-index:20}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--fundo);z-index:30}
+.topo{display:flex;align-items:center;gap:18px;padding-block:12px}
+.marca{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.03em;text-decoration:none;flex:1;display:flex;align-items:center;gap:9px}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--verde);color:var(--menta);display:grid;place-items:center;font-size:15px;flex:none}
+nav.menu{display:none;gap:20px;font-size:14px;font-weight:500}
+nav.menu a{text-decoration:none;color:var(--tinta-2)}
+.tel{display:none;font-weight:700;font-size:14px;text-decoration:none}
+@media(min-width:960px){nav.menu{display:flex}.tel{display:block}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 22px;font:700 15px/1 var(--corpo);cursor:pointer;text-decoration:none;min-height:52px}
+.btn-z{background:var(--zap);color:#04130C;box-shadow:0 5px 16px rgba(29,170,97,.28)}
+.btn-e{background:var(--verde);color:var(--menta)}
+.btn-o{background:transparent;color:var(--tinta);border:1.5px solid var(--borda)}
+.btn-min{min-height:44px;padding:11px 16px;font-size:14px;border-radius:10px}
+
+.hero{display:grid;gap:34px;align-items:start}
+@media(min-width:980px){.hero{grid-template-columns:1.02fr .98fr;gap:48px}}
+.tag{display:inline-flex;gap:7px;align-items:center;background:var(--menta);border:1px solid var(--borda);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;margin-bottom:18px}
+h1 .zap{color:var(--zap)}
+.checks{display:grid;grid-template-columns:repeat(2,auto);gap:9px 22px;margin-top:22px;font-size:14px;font-weight:500;justify-content:start}
+.checks span::before{content:"✓";display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--zap);color:#04130C;font-size:11px;font-weight:700;margin-right:8px;vertical-align:-3px}
+.vitrine{background:var(--menta);border:1px solid var(--borda);border-radius:14px;padding:16px;display:flex;gap:16px;align-items:center;margin-top:26px}
+.vitrine>div:first-child{width:108px;flex:none}
+.vitrine b{font-family:var(--display);font-size:19px;display:block}
+.vitrine small{color:var(--tinta-2);font-size:13px}
+
+.form{background:var(--menta);border:1px solid var(--borda);border-radius:16px;padding:20px;min-width:0}
+.form h2{font-size:21px;margin-bottom:5px}
+.form>p{font-size:13.5px;color:var(--tinta-2);margin-bottom:16px}
+.barra{display:flex;gap:5px;margin-bottom:18px}
+.barra i{height:4px;border-radius:999px;background:var(--borda);flex:1}
+.barra i.on{background:var(--zap)}
+.campo{display:block;margin-bottom:14px}
+.campo span{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+input,select,textarea{width:100%;font:400 15px/1.4 var(--corpo);color:var(--tinta);background:var(--fundo);border:1.5px solid var(--borda);border-radius:10px;padding:12px 13px;min-height:48px}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--zap);outline:none}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.chip{border:1.5px solid var(--borda);background:var(--fundo);color:var(--tinta-2);border-radius:999px;padding:8px 13px;font:500 12.5px/1 var(--corpo);cursor:pointer;min-height:38px}
+.chip:hover{border-color:var(--zap);color:var(--tinta)}
+.sel{display:flex;gap:12px;align-items:center;background:var(--fundo);border:1.5px solid var(--zap);border-radius:12px;padding:10px;margin-bottom:14px}
+.sel>div:first-child{width:56px;flex:none}
+.sel b{display:block;font-size:14px}
+.sel small{color:var(--tinta-2);font-size:12.5px}
+.sel button{margin-left:auto;background:none;border:0;color:var(--zap);font:600 13px/1 var(--corpo);cursor:pointer;min-height:44px;padding:0 4px}
+.nota{font-size:12px;color:var(--tinta-2);text-align:center;margin-top:11px}
+
+.nums{background:var(--verde);color:var(--menta)}
+.nums .w{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;padding-block:28px}
+@media(min-width:760px){.nums .w{grid-template-columns:repeat(4,1fr)}}
+.nums b{font-family:var(--display);font-size:30px;display:block;letter-spacing:-.03em}
+.nums small{font-size:12.5px;opacity:.78}
+
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
+.filtro{border:1.5px solid var(--borda);background:transparent;color:var(--tinta-2);border-radius:10px;padding:10px 16px;font:600 13.5px/1 var(--corpo);cursor:pointer;min-height:44px}
+.filtro[aria-pressed="true"]{background:var(--verde);border-color:var(--verde);color:var(--menta)}
+.grade{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:720px){.grade{grid-template-columns:repeat(4,1fr);gap:18px}}
+.card{border:1px solid var(--borda);border-radius:14px;overflow:hidden;background:var(--fundo);display:flex;flex-direction:column;min-width:0}
+.card .foto{background:var(--menta);padding:14px;position:relative}
+.selo-hoje{position:absolute;top:9px;left:9px;background:var(--fundo);border:1px solid var(--borda);font-size:10px;font-weight:700;padding:4px 8px;border-radius:999px}
+.selo-top{position:absolute;top:9px;right:9px;background:var(--ambar);color:#2A1D00;font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px}
+.card .txt{padding:12px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card .cod{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-2);font-weight:700}
+.card h3{font-size:16px}
+.card .preco{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.card .preco small{font-family:var(--corpo);font-size:11.5px;font-weight:500;color:var(--tinta-2);margin-left:6px}
+.card .btn{margin-top:auto;width:100%}
+
+.passos{display:grid;gap:22px;margin-top:30px}
+@media(min-width:860px){.passos{grid-template-columns:repeat(4,1fr)}}
+.passo{border-top:2px solid var(--zap);padding-top:14px}
+.passo span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-2);font-weight:700}
+.passo b{display:block;font-family:var(--display);font-size:17px;margin:6px 0 5px}
+.passo p{font-size:14px;color:var(--tinta-2)}
+
+.cidades{display:grid;gap:30px;align-items:center}
+@media(min-width:900px){.cidades{grid-template-columns:1.05fr .95fr;gap:44px}}
+.chips-cid{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips-cid span{background:var(--menta);border:1px solid var(--borda);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500}
+.mapa{background:var(--menta);border:1px solid var(--borda);border-radius:14px;padding:22px;text-align:center;color:var(--tinta-2);font-size:13px}
+
+.deps{display:grid;gap:16px;margin-top:28px}
+@media(min-width:800px){.deps{grid-template-columns:repeat(3,1fr)}}
+.dep{border:1px solid var(--borda);border-radius:14px;padding:18px;font-size:14.5px;min-width:0}
+.dep .est{color:var(--ambar);font-size:14px;letter-spacing:2px}
+.dep p{margin:10px 0 12px;color:var(--tinta-2)}
+.dep b{font-size:13.5px}
+
+.par{display:grid;gap:22px}
+@media(min-width:900px){.par{grid-template-columns:.95fr 1.05fr;gap:40px;align-items:start}}
+.bloco-emp{background:var(--verde);color:var(--menta);border-radius:16px;padding:26px}
+.bloco-emp h3{font-family:var(--display);font-size:24px;margin-bottom:10px}
+.bloco-emp ul{list-style:none;padding:0;margin:16px 0 20px;display:grid;gap:9px;font-size:14.5px}
+.bloco-emp li::before{content:"✓";color:var(--zap);font-weight:800;margin-right:9px}
+details{border-bottom:1px solid var(--borda)}
+summary{cursor:pointer;padding:16px 0;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;gap:14px;align-items:center;min-height:44px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--zap);font-size:19px;font-weight:700;flex:none}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:16px;color:var(--tinta-2);font-size:14px;max-width:70ch}
+
+.final{background:var(--zap);color:#04130C;border-radius:18px;padding:30px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.final h2{font-size:clamp(24px,3.4vw,34px)}
+.final p{font-size:15px;opacity:.82;margin-top:6px}
+.final .btn{background:#04130C;color:var(--zap)}
+
+footer{background:var(--verde);color:var(--menta);padding-block:40px 108px}
+@media(min-width:760px){footer{padding-block:40px 34px}}
+.fgrid{display:grid;gap:28px}
+@media(min-width:760px){.fgrid{grid-template-columns:1.7fr 1fr 1fr 1fr}}
+footer h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--zap);margin:0 0 11px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:14px}
+footer a{color:inherit;text-decoration:none;opacity:.85}
+.legal{border-top:1px solid rgba(203,232,215,.2);margin-top:30px;padding-top:16px;font-size:12.5px;opacity:.7}
+
+.fixa{position:fixed;left:0;right:0;bottom:0;background:var(--fundo);border-top:1px solid var(--borda);display:flex;gap:10px;z-index:40;
+  padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+@media(min-width:760px){.fixa{display:none}}
+.fixa .btn-z{flex:1}
+.fixa .btn-o{flex:none;width:52px;padding:0}
+
+#wa{position:fixed;inset:0;background:rgba(6,16,11,.76);display:grid;place-items:end center;z-index:60;padding:16px}
+@media(min-width:620px){#wa{place-items:center}}
+.wa-cx{background:var(--fundo);border-radius:16px;width:100%;max-width:420px;overflow:hidden;max-height:92vh;overflow-y:auto}
+.wa-top{background:#075E54;color:#fff;padding:13px 16px;display:flex;align-items:center;gap:11px;font-size:14px}
+.wa-top small{display:block;opacity:.75;font-size:11.5px}
+.wa-corpo{background:#ECE5DD;padding:16px}
+.balao{background:#DCF8C6;color:#111b15;border-radius:10px 2px 10px 10px;padding:9px;margin-left:auto;max-width:92%;font-size:13.5px;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.prev{background:rgba(0,0,0,.06);border-radius:7px;overflow:hidden;margin-bottom:7px}
+.prev .img{background:#0F3D2E;padding:16px}
+.prev .txt{padding:8px 10px}
+.prev .txt b{display:block;font-size:13px}
+.prev .txt span{display:block;font-size:11.5px;opacity:.72;margin:2px 0 4px}
+.prev .txt i{font-style:normal;font-size:11px;opacity:.55;word-break:break-all}
+.balao .link{color:#0a6b4f;word-break:break-all;display:block;margin-top:5px;font-size:12.5px}
+.hora{font-size:10.5px;opacity:.5;text-align:right;margin-top:2px}
+.wa-nota{padding:16px;font-size:13px;color:var(--tinta-2);border-top:1px solid var(--borda)}
+.wa-nota b{color:var(--tinta)}
+.wa-fechar{display:block;width:100%;border:0;border-top:1px solid var(--borda);background:transparent;color:var(--tinta);padding:15px;font:600 14px/1 var(--corpo);cursor:pointer;min-height:50px}
+
+.proto{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:max(10px,env(safe-area-inset-right,0px));z-index:50;background:var(--ambar);color:#2A1D00;font:800 10px/1 var(--corpo);letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;border-radius:999px}
+</style>
+</head>
+<body>
+<div class="proto">Protótipo B</div>
+
+<div class="vivo"><div class="w">
+  <span><span class="pulso"></span><b>Atendimento humano agora</b> pelo WhatsApp e telefone</span>
+  <span>Pedidos entregues <b>no mesmo dia</b> em todo o RJ</span>
+</div></div>
+
+<header><div class="w topo">
+  <a class="marca" href="#"><span class="logo">✚</span>FloresdaSaudade</a>
+  <nav class="menu" aria-label="Principal"><a href="#coroas">Coroas</a><a href="#pedir">Como pedir</a><a href="#onde">Onde entregamos</a><a href="#empresas">Empresas</a><a href="#duvidas">Dúvidas</a></nav>
+  <a class="tel" href="#">(21) 99927-4413</a>
+  <button class="btn btn-z btn-min" onclick="document.getElementById('local').focus()">Pedir agora</button>
+</div></header>
+
+<main>
+<section class="w">
+  <div class="hero">
+    <div>
+      <span class="tag">⏱ Entrega no mesmo dia em todo o estado do RJ</span>
+      <h1>Coroa de flores no velório <span class="zap">ainda hoje</span>.</h1>
+      <p class="lead" style="margin-top:18px">Escolha a coroa, diga onde é o velório e a frase da faixa. A gente monta, entrega e confirma tudo pelo WhatsApp.</p>
+      <div class="checks"><span>Frete grátis</span><span>NF-e para empresas</span><span>Pagamento facilitado</span><span>Mais de 40 anos</span></div>
+      <div class="vitrine">
+        <div id="heroFoto"></div>
+        <div><b>Coroas a partir de R$ 280</b><small>21 modelos em 3 linhas, todos montados à mão.</small></div>
+      </div>
+    </div>
+
+    <form class="form" id="pedido" novalidate>
+      <h2>Faça seu pedido em 1 minuto</h2>
+      <p>Preencha e o WhatsApp abre com tudo pronto. Você revisa antes de enviar.</p>
+      <div class="barra" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>
+      <div class="sel">
+        <div id="selFoto"></div>
+        <div><b id="selNome"></b><small id="selPreco"></small></div>
+        <button type="button" onclick="document.getElementById('coroas').scrollIntoView({behavior:'smooth'})">Trocar</button>
+      </div>
+      <label class="campo" for="local"><span>Local do velório</span>
+        <input id="local" name="local" autocomplete="street-address" placeholder="Cemitério, capela ou endereço"></label>
+      <div class="dupla">
+        <label class="campo" for="data"><span>Data</span><input id="data" name="data" type="date" value="2026-11-18"></label>
+        <label class="campo" for="hora"><span>Horário do velório</span><input id="hora" name="hora" type="time"></label>
+      </div>
+      <label class="campo" for="faixa"><span>Frase da faixa</span>
+        <textarea id="faixa" name="faixa" placeholder="Ex.: Eternas saudades, da família"></textarea>
+        <span class="chips">
+          <button class="chip" type="button" onclick="faixaRapida('Eternas saudades')">Eternas saudades</button>
+          <button class="chip" type="button" onclick="faixaRapida('Descanse em paz')">Descanse em paz</button>
+          <button class="chip" type="button" onclick="faixaRapida('Com carinho, da família')">Com carinho, da família</button>
+        </span>
+      </label>
+      <label class="campo" for="nome"><span>Nome de quem partiu</span>
+        <input id="nome" name="nome" autocomplete="off" placeholder="Para identificar a entrega"></label>
+      <button class="btn btn-z" style="width:100%" type="submit">✆ Enviar pedido pelo WhatsApp</button>
+      <p class="nota">Nada é cobrado agora. O pagamento é combinado no atendimento.</p>
+    </form>
+  </div>
+</section>
+
+<div class="nums"><div class="w">
+  <div><b>40+</b><small>anos de floricultura</small></div>
+  <div><b>Hoje</b><small>entrega no mesmo dia</small></div>
+  <div><b>R$ 0</b><small>de frete em todo o RJ</small></div>
+  <div><b>NF-e</b><small>para empresas e CNPJ</small></div>
+</div></div>
+
+<section class="w" id="coroas">
+  <p class="olho">21 modelos</p>
+  <h2>Coroas para velório</h2>
+  <div class="filtros" id="filtros"></div>
+  <div class="grade" id="grade"></div>
+</section>
+
+<section class="w" id="pedir" style="padding-top:0">
+  <p class="olho">Simples assim</p>
+  <h2>Como pedir sua coroa</h2>
+  <div class="passos">
+    <div class="passo"><span>Passo 1</span><b>Escolha a coroa</b><p>Filtre pelo valor e toque em “Pedir esta coroa”.</p></div>
+    <div class="passo"><span>Passo 2</span><b>Local e frase da faixa</b><p>Informe o velório, o horário e a mensagem.</p></div>
+    <div class="passo"><span>Passo 3</span><b>Confirme e pague</b><p>Pagamento facilitado, combinado no atendimento.</p></div>
+    <div class="passo"><span>Passo 4</span><b>Entregamos hoje</b><p>A coroa chega ao velório e você recebe a confirmação.</p></div>
+  </div>
+</section>
+
+<section class="w" id="onde">
+  <div class="cidades">
+    <div>
+      <p class="olho">Onde entregamos</p>
+      <h2>Todo o estado do Rio de Janeiro, no mesmo dia.</h2>
+      <p class="lead" style="margin-top:14px">Entregamos em cemitérios, capelas, crematórios e hospitais. Informe o local no pedido e confirmamos o horário pelo WhatsApp.</p>
+      <div class="chips-cid"><span>Rio de Janeiro</span><span>Niterói</span><span>São Gonçalo</span><span>Duque de Caxias</span><span>Nova Iguaçu</span><span>Petrópolis</span><span>Volta Redonda</span><span>Macaé</span><span>Cabo Frio</span><span>+ todo o estado</span></div>
+      <p style="font-size:12.5px;color:var(--tinta-2);margin-top:14px">Lista a confirmar com o cliente. Cada cidade pode virar uma página própria (SEO local).</p>
+    </div>
+    <div class="mapa">
+      <div style="max-width:220px;margin-inline:auto" id="mapaFoto"></div>
+      <p style="margin-top:12px">Mapa ilustrativo · substituir por mapa real das áreas atendidas</p>
+    </div>
+  </div>
+</section>
+
+<section class="w" style="padding-top:0">
+  <p class="olho">Avaliações</p>
+  <h2>Quem já pediu</h2>
+  <div class="deps">
+    <div class="dep"><div class="est">★★★★★</div><p>[Depoimento real do Google Meu Negócio — idealmente citando pontualidade da entrega e beleza da coroa.]</p><b>[Nome do cliente]</b></div>
+    <div class="dep"><div class="est">★★★★★</div><p>[Depoimento real: atendimento pelo WhatsApp, rapidez para resolver tudo.]</p><b>[Nome do cliente]</b></div>
+    <div class="dep"><div class="est">★★★★★</div><p>[Depoimento real de empresa: nota fiscal, praticidade no pedido corporativo.]</p><b>[Empresa / RH]</b></div>
+  </div>
+  <p style="font-size:12.5px;color:var(--tinta-2);margin-top:14px">Placeholders. Só publicar com avaliações reais e nome de quem escreveu — depoimento inventado é risco jurídico e some com a confiança.</p>
+</section>
+
+<section class="w" id="empresas" style="padding-top:0">
+  <div class="par">
+    <div class="bloco-emp">
+      <h3>Pedidos corporativos com nota fiscal</h3>
+      <p style="opacity:.84;font-size:14.5px">Para RH, condomínios, sindicatos e associações que precisam enviar homenagens com frequência.</p>
+      <ul><li>NF-e com CNPJ</li><li>Atendimento prioritário</li><li>Faixa com o nome da empresa</li></ul>
+      <button class="btn btn-z" onclick="abrirWhats(COROAS[13])">Falar com o comercial</button>
+    </div>
+    <div id="duvidas">
+      <p class="olho">Dúvidas</p>
+      <h2 style="margin-bottom:16px">Perguntas frequentes</h2>
+      <details open><summary>Até que horas posso pedir para entregar hoje?</summary><p>Pedidos confirmados até [horário] são entregues no mesmo dia em todo o RJ. <em>(a confirmar com o cliente)</em></p></details>
+      <details><summary>Posso escolher a frase da faixa?</summary><p>Sim, e a faixa acompanha a coroa. Você escreve no pedido ou escolhe uma das sugestões.</p></details>
+      <details><summary>Como funciona o pagamento?</summary><p>Combinado no atendimento, com pagamento facilitado. Nada é cobrado pelo site.</p></details>
+      <details><summary>Recebo foto da coroa antes da entrega?</summary><p>Sim, enviamos a confirmação pelo WhatsApp.</p></details>
+      <details><summary>Vocês entregam em hospitais e crematórios?</summary><p>Sim, além de cemitérios e capelas em todo o estado.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="w" style="padding-top:0">
+  <div class="final">
+    <div><h2>Precisa para hoje?</h2><p>Chame agora: um atendente monta o pedido com você.</p></div>
+    <button class="btn" onclick="abrirWhats(COROAS[2])">✆ Chamar no WhatsApp</button>
+  </div>
+</section>
+</main>
+
+<footer><div class="w">
+  <div class="fgrid">
+    <div>
+      <div class="marca" style="color:var(--menta);margin-bottom:12px"><span class="logo" style="background:var(--zap);color:#04130C">✚</span>FloresdaSaudade</div>
+      <p style="font-size:14px;opacity:.8;max-width:34ch">Coroas de flores para velório com entrega no mesmo dia em todo o estado do Rio de Janeiro.</p>
+    </div>
+    <div><h4>Coroas</h4><ul><li><a href="#coroas">Até R$ 400</a></li><li><a href="#coroas">R$ 400 – 600</a></li><li><a href="#coroas">R$ 700 – 1.000</a></li><li><a href="#coroas">Premium</a></li></ul></div>
+    <div><h4>Ajuda</h4><ul><li><a href="#pedir">Como pedir</a></li><li><a href="#onde">Onde entregamos</a></li><li><a href="#duvidas">Dúvidas</a></li></ul></div>
+    <div><h4>Contato</h4><ul><li>(21) 99927-4413</li><li>WhatsApp</li><li>[CNPJ]</li></ul></div>
+  </div>
+  <p class="legal">© 2026 Flores da Saudade · Política de Privacidade · Termos de Uso</p>
+</div></footer>
+
+<div class="fixa">
+  <button class="btn btn-o" aria-label="Ligar">☎</button>
+  <button class="btn btn-z" onclick="document.getElementById('local').focus()">Fazer pedido agora</button>
+</div>
+
+<div id="wa" hidden role="dialog" aria-modal="true" aria-label="Como a mensagem chega ao vendedor">
+  <div class="wa-cx">
+    <div class="wa-top"><span style="width:32px;height:32px;border-radius:50%;background:#128C7E;display:grid;place-items:center">✚</span><span><b>Flores da Saudade · Vendas</b><small>online</small></span></div>
+    <div class="wa-corpo">
+      <div class="balao">
+        <div class="prev"><div class="img" data-wa-thumb></div>
+          <div class="txt"><b data-wa-nome></b><span data-wa-desc></span><i data-wa-url></i></div></div>
+        <span data-wa-msg></span><span class="link" data-wa-link></span>
+        <div class="hora">agora ✓✓</div>
+      </div>
+    </div>
+    <p class="wa-nota"><b>É assim que o pedido chega.</b> O link leva à página da coroa, e o WhatsApp monta o card com a foto sozinho — sem URL de imagem colada no texto.</p>
+    <button class="wa-fechar" data-wa-fechar onclick="fecharWhats()">Fechar demonstração</button>
+  </div>
+</div>
+
+<script>
+/* ---- Catálogo: 21 coroas reais do site atual, com nomes propostos ---- */
+const COROAS = [
+  {cod:'ESSENCIAL · 001', nome:'Serenidade',  preco:280,  linha:'essencial', fl:['#FFFFFF','#F6F1E6'], fo:'#2E5B42', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 002', nome:'Luz',         preco:300,  linha:'essencial', fl:['#FFFFFF','#EFE7D8'], fo:'#33654A', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 003', nome:'Memória',     preco:360,  linha:'essencial', fl:['#F3C9D4','#FFFFFF'], fo:'#2E5B42', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 004', nome:'Paz',         preco:390,  linha:'essencial', fl:['#FFFFFF','#E3D9F0'], fo:'#35694E', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 005', nome:'Afeto',       preco:420,  linha:'essencial', fl:['#C7332F','#E86A5A'], fo:'#2A5340', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 006', nome:'Ternura',     preco:460,  linha:'essencial', fl:['#E9B23C','#F6D98A'], fo:'#33654A', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 007', nome:'Gratidão',    preco:490,  linha:'essencial', fl:['#B9AECD','#E6E0F0'], fo:'#2E5B42', faixa:'Eternas saudades'},
+  {cod:'ESSENCIAL · 008', nome:'Eterna',      preco:550,  linha:'essencial', fl:['#F3C9D4','#FFFFFF'], fo:'#35694E', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 01',   nome:'Girassol',    preco:700,  linha:'destaque',  fl:['#E9A319','#F7CE63'], fo:'#2A5340', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 02',   nome:'Alvorada',    preco:740,  linha:'destaque',  fl:['#E86A5A','#F6C7B3'], fo:'#2E5B42', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 03',   nome:'Rosada',      preco:780,  linha:'destaque',  fl:['#E79AB0','#FFFFFF'], fo:'#33654A', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 04',   nome:'Nevoeiro',    preco:780,  linha:'destaque',  fl:['#FFFFFF','#DCE6DD'], fo:'#2A5340', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 05',   nome:'Lírios',      preco:800,  linha:'destaque',  fl:['#B9AECD','#FFFFFF'], fo:'#35694E', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 06',   nome:'Jardim',      preco:900,  linha:'destaque',  fl:['#E9B23C','#E79AB0','#FFFFFF'], fo:'#2E5B42', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 07',   nome:'Poente',      preco:900,  linha:'destaque',  fl:['#D9602B','#F3A86B'], fo:'#33654A', faixa:'Eternas saudades'},
+  {cod:'DESTAQUE · 08',   nome:'Rubi',        preco:1000, linha:'destaque',  fl:['#B22A2A','#FFFFFF'], fo:'#2A5340', faixa:'Eternas saudades'},
+  {cod:'PREMIUM · 01',    nome:'Alvorada Nobre', preco:900,  linha:'premium', fl:['#FFFFFF','#F0E7D4','#E9B23C'], fo:'#24482F', faixa:'Eternas saudades'},
+  {cod:'PREMIUM · 02',    nome:'Ternura Nobre',  preco:980,  linha:'premium', fl:['#F3C9D4','#FFFFFF','#E79AB0'], fo:'#24482F', faixa:'Eternas saudades'},
+  {cod:'PREMIUM · 03',    nome:'Lavanda',        preco:980,  linha:'premium', fl:['#B9AECD','#E6E0F0','#FFFFFF'], fo:'#24482F', faixa:'Eternas saudades'},
+  {cod:'PREMIUM · 04',    nome:'Imperial',       preco:1250, linha:'premium', fl:['#B22A2A','#E9B23C','#FFFFFF'], fo:'#24482F', faixa:'Eternas saudades'},
+  {cod:'PREMIUM · 05',    nome:'Majestade',      preco:1250, linha:'premium', fl:['#FFFFFF','#E9B23C','#F0E7D4'], fo:'#24482F', faixa:'Eternas saudades'}
+];
+const LINHAS = {
+  essencial:{nome:'Essencial', de:280, ate:550, desc:'Coroas clássicas e delicadas, para uma homenagem simples e sincera.'},
+  destaque: {nome:'Destaque',  de:700, ate:1000, desc:'Composições maiores, com mais variedade de flores e volume.'},
+  premium:  {nome:'Premium',   de:900, ate:1250, desc:'Nossas peças mais imponentes, com flores nobres selecionadas.'}
+};
+const brl = n => 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits:2});
+const slug = c => c.nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-');
+
+/* Ilustração da coroa. No site real este bloco vira a foto do produto (campo ACF). */
+function coroaInner(c){
+  const n = 26, R = 34, cx = 50, cy = 50;
+  let folhas = '', flores = '';
+  for (let i = 0; i < n; i++){
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const rot = (a * 180 / Math.PI) + 90;
+    folhas += `<ellipse cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" rx="5.4" ry="9.6" fill="${c.fo}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(2)} ${y.toFixed(2)})" opacity="${i%2?0.82:1}"/>`;
+  }
+  for (let i = 0; i < n; i++){
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2 + 0.12;
+    const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const cor = c.fl[i % c.fl.length];
+    flores += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="5.1" fill="${cor}"/><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.9" fill="${cor}" stroke="rgba(0,0,0,.14)" stroke-width=".7"/>`;
+  }
+  return `<g>${folhas}</g><g>${flores}</g>`;
+}
+
+/* Cena do hero: composição de ambiente para o layout com imagem de fundo.
+   No site real esta cena é substituída por uma fotografia das coroas no salão. */
+function cenaHero(trio){
+  const pedestal = (x, w) => `<rect x="${x}" y="612" width="${w}" height="74" rx="4" fill="#F3EDE2"/><rect x="${x-6}" y="604" width="${w+12}" height="12" rx="4" fill="#FBF7EF"/><rect x="${x}" y="612" width="${w}" height="74" fill="url(#sombraPed)"/>`;
+  const coroa = (cx, cy, s, c) => `<g transform="translate(${cx - 50*s} ${cy - 50*s}) scale(${s})"><ellipse cx="50" cy="95" rx="40" ry="6" fill="rgba(40,35,25,.18)"/>${coroaInner(c)}</g>`;
+  return `<svg viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%;display:block">
+  <defs>
+    <linearGradient id="parede" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE7D8"/><stop offset=".62" stop-color="#E4D9C5"/><stop offset="1" stop-color="#D8CBB4"/>
+    </linearGradient>
+    <linearGradient id="sombraPed" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(90,78,58,.16)"/><stop offset=".4" stop-color="rgba(90,78,58,0)"/>
+    </linearGradient>
+    <radialGradient id="luz" cx="50%" cy="34%" r="62%">
+      <stop offset="0" stop-color="rgba(255,250,236,.85)"/><stop offset="1" stop-color="rgba(255,250,236,0)"/>
+    </radialGradient>
+    <linearGradient id="veu" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(32,44,37,.93)"/><stop offset=".42" stop-color="rgba(32,44,37,.72)"/><stop offset=".78" stop-color="rgba(32,44,37,.18)"/><stop offset="1" stop-color="rgba(32,44,37,.1)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="700" fill="url(#parede)"/>
+  <rect y="596" width="1600" height="104" fill="#C9BBA2"/>
+  <rect width="1600" height="700" fill="url(#luz)"/>
+  <g opacity=".5">
+    <rect x="1140" y="118" width="196" height="150" rx="3" fill="none" stroke="#B9A98C" stroke-width="7"/>
+    <rect x="1156" y="134" width="164" height="118" fill="#DCD2BE"/>
+    <path d="M1156 214 l44 -42 l38 34 l30 -24 l52 44 v26 h-164 z" fill="#C6B99F"/>
+  </g>
+  <g opacity=".34"><rect x="236" y="150" width="7" height="446" fill="#B9A98C"/><rect x="214" y="138" width="52" height="16" rx="4" fill="#B9A98C"/></g>
+  ${pedestal(560, 150)}${pedestal(770, 170)}${pedestal(1000, 150)}
+  ${coroa(635, 468, 2.5, trio[0])}
+  ${coroa(855, 440, 3.0, trio[1])}
+  ${coroa(1075, 468, 2.5, trio[2])}
+  <rect width="1600" height="700" fill="url(#veu)"/>
+</svg>`;
+}
+
+function coroaSVG(c, aro){
+  const n = 26, R = 34, cx = 50, cy = 50;
+  let folhas = '', flores = '';
+  for (let i = 0; i < n; i++){
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const rot = (a * 180 / Math.PI) + 90;
+    folhas += `<ellipse cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" rx="5.4" ry="9.6" fill="${c.fo}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(2)} ${y.toFixed(2)})" opacity="${i%2?0.82:1}"/>`;
+  }
+  for (let i = 0; i < n; i++){
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2 + 0.12;
+    const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const cor = c.fl[i % c.fl.length];
+    flores += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="5.1" fill="${cor}"/><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.9" fill="${cor}" stroke="rgba(0,0,0,.14)" stroke-width=".7"/>`;
+  }
+  const faixa = `<g transform="rotate(-18 50 62)"><path d="M14 58 h72 v11 h-72 z" fill="#F7F2E6" stroke="rgba(0,0,0,.12)" stroke-width=".6"/><text x="50" y="65.9" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="6.4" fill="#4a4235">${c.faixa}</text></g>`;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="Ilustração da coroa ${c.nome}, linha ${LINHAS[c.linha].nome}" style="width:100%;height:auto;display:block">
+    ${aro ? `<circle cx="50" cy="50" r="40" fill="${aro}"/>` : ''}
+    <g>${folhas}</g><g>${flores}</g>${faixa}</svg>`;
+}
+
+/* Demonstração: o que o vendedor recebe no WhatsApp ao clicar em Comprar. */
+function abrirWhats(c){
+  const url = 'floresdasaudade.com.br/coroas/' + slug(c);
+  const m = document.getElementById('wa');
+  m.querySelector('[data-wa-thumb]').innerHTML = coroaSVG(c, '#11301f');
+  m.querySelector('[data-wa-nome]').textContent = c.nome + ' — ' + LINHAS[c.linha].nome;
+  m.querySelector('[data-wa-desc]').textContent = brl(c.preco) + ' · frete grátis · entrega no mesmo dia em todo o RJ';
+  m.querySelector('[data-wa-url]').textContent = url;
+  m.querySelector('[data-wa-msg]').textContent = 'Olá! Quero esta coroa: ' + c.nome + ' (' + brl(c.preco) + ').';
+  m.querySelector('[data-wa-link]').textContent = 'https://' + url;
+  m.hidden = false;
+  m.querySelector('[data-wa-fechar]').focus();
+  document.addEventListener('keydown', escWa);
+}
+function fecharWhats(){
+  document.getElementById('wa').hidden = true;
+  document.removeEventListener('keydown', escWa);
+}
+function escWa(e){ if (e.key === 'Escape') fecharWhats(); }
+
+
+let escolhida = COROAS[2];
+document.getElementById('heroFoto').innerHTML = coroaSVG(COROAS[13]);
+document.getElementById('mapaFoto').innerHTML = coroaSVG(COROAS[8]);
+
+function pintarSel(){
+  document.getElementById('selFoto').innerHTML = coroaSVG(escolhida);
+  document.getElementById('selNome').textContent = escolhida.nome + ' · ' + LINHAS[escolhida.linha].nome;
+  document.getElementById('selPreco').textContent = brl(escolhida.preco) + ' · frete grátis';
+}
+pintarSel();
+function faixaRapida(t){ document.getElementById('faixa').value = t; }
+
+const FAIXAS = [
+  {k:'todas', r:'Todas', t:c=>true},
+  {k:'a', r:'Até R$ 400', t:c=>c.preco<=400},
+  {k:'b', r:'R$ 400 – 600', t:c=>c.preco>400&&c.preco<=600},
+  {k:'c', r:'R$ 700 – 1.000', t:c=>c.preco>600&&c.preco<=1000},
+  {k:'d', r:'Premium', t:c=>c.linha==='premium'}
+];
+const fWrap = document.getElementById('filtros');
+FAIXAS.forEach((f,i)=>{
+  const b=document.createElement('button');
+  b.className='filtro';b.type='button';b.textContent=f.r;b.setAttribute('aria-pressed',i===0);
+  b.onclick=()=>{fWrap.querySelectorAll('.filtro').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');render(f);};
+  fWrap.appendChild(b);
+});
+
+function render(f){
+  const lista = COROAS.filter(f.t);
+  const g = document.getElementById('grade');
+  if(!lista.length){ g.innerHTML = '<p class="lead">Nenhuma coroa nesta faixa. Veja as outras faixas ou fale com o atendimento.</p>'; return; }
+  g.innerHTML = lista.map((c,i)=>`
+    <article class="card">
+      <div class="foto">${coroaSVG(c)}<span class="selo-hoje">Entrega hoje</span>${i===1?'<span class="selo-top">Mais pedida</span>':''}</div>
+      <div class="txt">
+        <p class="cod">${c.cod}</p><h3>Coroa ${c.nome}</h3>
+        <p class="preco">${brl(c.preco).replace(',00','')}<small>frete grátis</small></p>
+        <button class="btn btn-z btn-min" data-i="${COROAS.indexOf(c)}">✆ Pedir esta coroa</button>
+      </div>
+    </article>`).join('');
+  g.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{
+    escolhida = COROAS[+b.dataset.i]; pintarSel();
+    document.getElementById('pedido').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+}
+render(FAIXAS[0]);
+
+document.getElementById('pedido').addEventListener('submit', e => { e.preventDefault(); abrirWhats(escolhida); });
+document.getElementById('wa').addEventListener('click', e => { if (e.target.id === 'wa') fecharWhats(); });
+</script>
+</body>
+</html>
